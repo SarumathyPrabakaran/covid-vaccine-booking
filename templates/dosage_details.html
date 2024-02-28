@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dosage Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <a href="/list/center">Back</a>
+    <div class="container mt-5">
+        <h1 class="mb-4">Dosage Details</h1>
+
+        <form method="post">
+            <input type="hidden" name="search" id="search" value="true" >
+            <label for="date">Search:</label>
+            <input type="date" name="date" id="date">
+            <input type="submit" value="submit">
+        </form>
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Center ID</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>Address</th>
+                    <th>Location</th>
+                    <th>POC</th>
+                    <th>Total Slots</th>
+                    <th>Booked Slots</th>
+                    <th>Available Slots</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for center in dosage_details %}
+                <tr>
+                    <td>{{ center.centerId }}</td>
+                    <td>{{ center.state }}</td>
+                    <td>{{ center.city }}</td>
+                    <td>{{ center.address }}</td>
+                    <td>{{ center.location }}</td>
+                    <td>{{ center.poc }}</td>
+                    <td>{{ center.total_slots }}</td>
+                    <td>{{ center.booked_slots }}</td>
+                    <td>{{ center.available_slots }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
