@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccine Centers</title>
+ 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+   
+        body {
+            background-color: #f8f9fa;
+        }
+        .center-table {
+            margin-top: 20px;
+        }
+        .center-table th, .center-table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+        .admin-button {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .user-button {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <a href="/logout" class="btn btn-primary btn-lg">Logout</a>
+
+        <h1 class="mt-5 text-center">Vaccine Centers - {{date}} - {{day}}</h1>
+
+        {% if admin %}
+        <a href="/add/center">Add Center</a>
+  
+    {% elif freeze %}
+        Booking freezed for today. 
+        
+    
+    {% endif %}
+    <p><a href="/list/center">Todays Availability</a></p>
+    <p><a href="/book/tomorrow">Tomorrow's Availability</a></p>
+
+        <table class="table table-bordered center-table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Center ID</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>Address</th>
+                    <th>Location</th>
+                    <th>Opening Time</th>
+                    <th>Closing Time</th>
+                    <th>POC</th>
+                    <th>Available Slots</th>
+                    {% if admin %}
+                    <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for center in centers %}
+                <tr>
+                    <td>{{ center.centerId }}</td>
+                    <td>{{ center.state }}</td>
+                    <td>{{ center.city }}</td>
+                    <td>{{ center.address }}</td>
+                    <td>{{ center.location }}</td>
+                    <td>{{ center.openingTime }}</td>
+                    <td>{{ center.closingTime }}</td>
+                    <td>{{ center.poc }}</td>
+                    <td>{{ available_slots[center.centerId] }}</td>
+                    {% if admin %}
+                    <td>
+                        <form action="/remove/center" method="post" style="display: inline;">
+                            <input type="hidden" name="vid" value="{{ center.centerId }}">
+                            <button type="submit" class="btn btn-sm btn-danger admin-button">Remove Center</button>
+                        </form>
+                    </td>
+                    {% else %}
+                    <td>
+                        {% if freeze %}
+                           <button class="btn btn-sm btn-secondary" disabled>Booking Freezed</button>
+                           <!-- <form action="/book/tomorrow" method="post" style="display: inline;">
+                            <input type="hidden" name="vid" value="{{ center.centerId }}">
+                            <button type="submit" class="btn btn-sm btn-primary user-button">Book Slot Tomorrow</button>
+                        </form> -->
+                        {% elif available_slots[center.centerId] > 0 %}
+                        <form action="/apply" method="post" style="display: inline;">
+                            <input type="hidden" name="vid" value="{{ center.centerId }}">
+                            <button type="submit" class="btn btn-sm btn-primary user-button">Book Slot</button>
+                        </form>
+                        {% else %}
+                        <button class="btn btn-sm btn-secondary" disabled>No Slots Available</button>
+                        <!-- <form action="/book/tomorrow" method="post" style="display: inline;">
+                            <input type="hidden" name="vid" value="{{ center.centerId }}">
+                            <button type="submit" class="btn btn-sm btn-primary user-button">Book Slot Tomorrow</button>
+                        </form> -->
+                        {% endif %}
+
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+ 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>
+</html>
