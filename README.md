@@ -32,6 +32,8 @@ This is a Flask web application for managing vaccine centers, bookings, and dosa
 
 3. Start the flask app:
 
-   By default, this application uses SQLite. If you want to use a different database, modify the SQLALCHEMY_DATABASE_URI in app.py.
+   By default, this application uses SQLite. 
 
     ```python3 app.py```
+
+```batch.py``` -> To be executed as cron job everyday 2 PM to start the booking process for the next day. Like wise, the booking process for the day closes at 2 PM.
